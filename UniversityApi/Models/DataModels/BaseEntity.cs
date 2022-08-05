@@ -8,11 +8,11 @@ namespace UniversityApi.Models.DataModels
         [Required]
         [Key]
         public int Id { get; set; }
-        public string CreatedBy { get; set; } = String.Empty;
+        public User CreatedBy { get; set; } = new User();
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public string UpdatedBy { get; set; } = String.Empty;
+        public User UpdatedBy { get; set; } = new User();
         public DateTime? UpdatedAt { get; set; }
-        public string DeletedBy { get; set; } = String.Empty;
+        public User DeletedBy { get; set; } = new User();
         public DateTime? DeletedAt { get; set; }
         public bool IsDeleted { get; set; }
     }
