@@ -180,8 +180,86 @@ namespace LinqSnippets
             //Employees with at least 1000 salary from all enterprises
             bool hasEmployeesWithSalaryMoreThanOrEqual1000 =
                 enterprises.Any(enterprise =>
-                      enterprise.Employees.Any(employee => employee.Salary >= 1000)
-                      );
+                      enterprise.Employees.Any(employee => employee.Salary >= 1000));
+
         }
+
+        static public void linqCollections()
+        {
+            var firstList = new List<string> { "a", "b", "c" };
+            var secondList = new List<string> { "d", "e", "f" };
+
+            //INNER JOIN
+            var commonResult = from element in firstList
+                               join secondElement in secondList
+                               on element equals secondElement
+                               select new { element, secondElement };
+
+            var commonResult2 = firstList.Join(secondList,
+                firstElement => firstElement,
+                secondElement => secondElement,
+                (firstElement, secondElement) => new { firstElement, secondElement });
+
+            //OUTTER JOIN LEFT
+            var leftOuterJoin = from element in firstList
+                                join secondElement in secondList
+                                on element equals secondElement
+                                into temporalList
+                                from temporalElement in temporalList.DefaultIfEmpty()
+                                where element != temporalElement
+                                select new { Element = element };
+
+            //OUTTER JOIN RIGHT
+            var rightOuterJoin = from secondElement in secondList
+                                 join element in firstList
+                                 on secondElement equals element
+                                 into temporalList
+                                 from temporalElement in temporalList.DefaultIfEmpty()
+                                 where secondElement != temporalElement
+                                 select new { Element = secondElement };
+
+            //UNION
+            var unionList = leftOuterJoin.Union(rightOuterJoin);
+
+        }
+
+        static public void SkipTakeLinq()
+        {
+            var myList = new[]
+            {
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            };
+
+            //SKIP
+            var skipTwoFirstValue = myList.Skip(2); // {3, 4, 5, 6, 7, 8, 9, 10}
+
+            var skipTwoLastValue = myList.Skip(2); // {1, 2, 3, 4, 5, 6, 7, 8}
+
+            var skipWhileSmallerThan4 = myList.SkipWhile(num => num < 4); // {4, 5, 6, 7, 8, 9, 10}
+
+            //TAKE
+            var takeTwoFirstValue = myList.Take(2); // {1, 2}
+
+            var takeLastTwoValues = myList.TakeLast(2); // {9, 10}
+
+            var takeWhileSmallerThan4 = myList.TakeWhile(num => num < 4); // {1, 2, 3}
+        }
+
+        //TODO:
+
+        //VARIABLES
+
+        //ZIP
+
+        //REPEAT
+
+        //ALL
+
+        //AGGREGATE
+
+        //DISTINCT
+
+        //GROUPBY
+
     }
 }
