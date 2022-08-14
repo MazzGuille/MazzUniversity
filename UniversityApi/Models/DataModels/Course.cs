@@ -21,13 +21,16 @@ namespace UniversityApi.Models.DataModels
         [Required]
         public string Description { get; set; } = String.Empty;
 
-        public string Level { get; set; } = String.Empty;
+        public Level Level { get; set; } = Level.Basic;
 
         [Required]
         public ICollection<Category> Categories { get; set; } = new List<Category>();
 
         [Required]
         public ICollection<Student> Students { get; set; } = new List<Student>();
+
+        [Required]
+        public Chapter Chapter { get; set; } = new Chapter();
 
     }
 }
