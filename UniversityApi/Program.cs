@@ -13,9 +13,11 @@ var connectionString = builder.Configuration.GetConnectionString(CONNECTIONNAME)
 //3. Add context
 builder.Services.AddDbContext<UniversityDBContext>(options => options.UseSqlServer(connectionString));
 
+//7. Add services of JWT Authorization
+//TODO
+//builder.Services.AddJwtTokenServices(builder.Configuration);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 //4. Add custom services (folder services)
@@ -24,6 +26,8 @@ builder.Services.AddScoped<IStudentsService, StudentsService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+//8. TODO: CONFIG SWAGGER TO TAKE CARE OF JWT AUTHORIZATION
 builder.Services.AddSwaggerGen();
 
 
