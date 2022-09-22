@@ -1,5 +1,7 @@
 //1. Usings to work with Entity framework
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using UniversityApi;
 using UniversityApi.DataAccess;
 using UniversityApi.Services;
 
@@ -14,8 +16,7 @@ var connectionString = builder.Configuration.GetConnectionString(CONNECTIONNAME)
 builder.Services.AddDbContext<UniversityDBContext>(options => options.UseSqlServer(connectionString));
 
 //7. Add services of JWT Authorization
-//TODO
-//builder.Services.AddJwtTokenServices(builder.Configuration);
+builder.Services.AddJwtTokenServices(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -24,11 +25,45 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IStudentsService, StudentsService>();
 //TODO: Add all the services we create
 
+//8. Add AUthorization
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("UserOnlyPolicy", policy => policy.RequireClaim("UserOnly", "User1"));
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-//8. TODO: CONFIG SWAGGER TO TAKE CARE OF JWT AUTHORIZATION
-builder.Services.AddSwaggerGen();
+//9. CONFIG SWAGGER TO TAKE CARE OF JWT AUTHORIZATION
+builder.Services.AddSwaggerGen(c =>
+{
+    // api title, custumize for each API; c.SwaggerDoc("v1", new OpenApiInfo { Title = "Login & Registration API", Version = "v1", Description = "API de login y registro con JWT/ Login and registration API with JWT" });
+
+    //DEFINING SECURITY
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Insertar token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 
 //5. CORS Configuration

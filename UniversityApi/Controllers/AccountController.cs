@@ -19,6 +19,7 @@ namespace UniversityApi.Controllers
             _jwtSettings = jwtSettings;
         }
 
+        //TODO: CHANGE FOR REAL USERS FROM DB
         private IEnumerable<User> Logins = new List<User>()
         {
             new User()
